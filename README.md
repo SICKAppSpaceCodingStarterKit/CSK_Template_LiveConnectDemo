@@ -1,14 +1,16 @@
-# CSK_Module_[ModuleName]
+# CSK_Template_LiveConnectDemo
 
-Module / Application to provide [...] functionality.
+## INFO: Draft version. Not further developed / tested so far! Check for available GitHub forks of this repository to see latest updates.
+
+CSK Template to show how CSK modules can be used/combined to e.g. push sensor data to the SICK AssetHub.
 
 *If available, please also add a screenshot/gif of the UI of the module here placed within /docu/media/ (see code)*
-![](https://github.com/SICKAppSpaceCodingStarterKit/[REPO_OF_MODULE]/blob/main/docu/media/UI_Screenshot.png)
+![](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Template_LiveConnectDemo/blob/main/docu/media/UI_Screenshot.png)
 
 ## How to Run
 
 [***...please fill with informations...***]  
-For further information check out the [documentation](https://raw.githack.com/SICKAppSpaceCodingStarterKit/[REPO_OF_MODULE]/main/docu/CSK_Module_[MODULENAME].html) [update link] in the folder "docu".
+For further information check out the [documentation](https://raw.githack.com/SICKAppSpaceCodingStarterKit/CSK_Template_LiveConnectDemo/main/docu/CSK_Template_LiveConnectDemo.html) in the folder "docu".
 
 ## Information
 
@@ -28,4 +30,4 @@ Please check the [documentation](https://github.com/SICKAppSpaceCodingStarterKit
 
 ## Topics
 
-Coding Starter Kit, CSK, Module, SICK-AppSpace, [key_words]
+Coding Starter Kit, CSK, Module, SICK-AppSpace, AssetHub, LiveConnect, Cloud
