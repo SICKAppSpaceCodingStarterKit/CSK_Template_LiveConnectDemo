@@ -50,8 +50,8 @@ _G.liveConnectDemo_Model = require('Template/LiveConnectDemo/LiveConnectDemo_Mod
 --**********************Start Function Scope *******************************
 --**************************************************************************
 
---- Function to react on startup event of the app
-local function main()
+--- Function to react on LiveConnect initialization
+local function handleOnClientInitialized()
 
   ----------------------------------------------------------------------------------------
   -- INFO: Please check if module will eventually load inital configuration triggered via
@@ -62,17 +62,19 @@ local function main()
   -- Can be used e.g. like this
   ----------------------------------------------------------------------------------------
 
-  -- _G.liveConnectDemo_Model.doSomething() -- if you want to start a function
-  -- ...
+
+  local function handleOnClientInitialized()
+    -- MQTT profile (data push)
+    _G.liveConnectDemo_Model.addNewMQTTProfile("1057651", "17410401") -- Part- and serial number of a SICK DT35 IO-Link device
+
+    -- HTTP profile (data poll)
+    _G.liveConnectDemo_Model.addNewHTTPProfile("1057651", "17410401") -- Part- and serial number of a SICK DT35 IO-Link device
+  end
+
   CSK_LiveConnectDemo.pageCalled() -- Update UI
 
 end
-Script.register("Engine.OnStarted", main)
-
---OR
-
--- Call function after persistent data was loaded
---Script.register("CSK_LiveConnectDemo.OnDataLoadedOnReboot", main)
+Script.register('CSK_LiveConnect.OnClientInitialized', handleOnClientInitialized)
 
 --**************************************************************************
 --**********************End Function Scope *********************************

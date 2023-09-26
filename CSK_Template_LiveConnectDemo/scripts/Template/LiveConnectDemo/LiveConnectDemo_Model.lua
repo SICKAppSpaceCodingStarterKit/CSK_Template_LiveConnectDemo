@@ -38,13 +38,11 @@ if _G.availableAPIs.specific then
 end
 ]]
 
---[[
 -- Create parameters / instances for this module
-liveConnectDemo_Model.object = Image.create() -- Use any AppEngine CROWN
-liveConnectDemo_Model.counter = 1 -- Short docu of variable
-liveConnectDemo_Model.varA = 'value' -- Short docu of variable
---...
-]]
+local liveConnectDemo_Model.timer = Timer.create()
+local liveConnectDemo_Model.json = require("utils.Lunajson")
+local liveConnectDemo_Model.mqttProfileFilePath = "resources/samplePrfoiles/profileMQTTTest.yaml"
+local liveConnectDemo_Model.httpProfileFilePath = "resources/samplePrfoiles/profileHTTPTest.yaml"
 
 -- Parameters to be saved permanently if wanted
 liveConnectDemo_Model.parameters = {}
@@ -58,15 +56,116 @@ liveConnectDemo_Model.parameters = {}
 --**********************Start Function Scope *******************************
 --**************************************************************************
 
---[[
--- Some internal code docu for local used function to do something
----@param content auto Some info text if function is not already served
-local function doSomething(content)
-  _G.logger:info(nameOfModule .. ": Do something")
-  liveConnectDemo_Model.counter = liveConnectDemo_Model.counter + 1
+-- ##############################
+-- ## MQTT profile (data push) ##
+-- ##############################
+
+-------------------------------------------------------------------------------------
+-- Payload to be sent at a specific interval
+local function sendMQTTData(partNumber, serialNumber, topic)
+  local l_payload = {}
+  l_payload.timestamp = DateTime.getDateTime()
+  l_payload.index = math.random(0,255)
+  l_payload.data = "Payload from the edge side"
+
+  local l_payloadJson = liveConnectDemo_Model.json.encode(l_payload)
+  CSK_LiveConnect.publishMQTTData(topic, partNumber, serialNumber, l_payloadJson)
 end
-liveConnectDemo_Model.doSomething = doSomething
-]]
+liveConnectDemo_Model.sendMQTTData = sendMQTTData
+
+-------------------------------------------------------------------------------------
+-- Add MQTT application profile
+local function addNewMQTTProfile(partNumber, serialNumber)
+  -- Profile definition
+  local l_mqttProfile = CSK_LiveConnect.MQTTProfile.create()
+  local l_topic = "sick/device/mqtt-test"
+  l_mqttProfile:setUUID("55aa8083-24dc-41aa-bad0-ee28d5892d9d")
+  l_mqttProfile:setName("LiveConnect MQTT test profile")
+  l_mqttProfile:setDescription("Profile to test data push mechanism")
+  l_mqttProfile:setBaseTopic(l_topic)
+  l_mqttProfile:setAsyncAPISpecification(File.open(liveConnectDemo_Model.mqttProfileFilePath, "rb"):read())
+  l_mqttProfile:setVersion("0.1.0")
+
+  -- Payload definition
+  local l_sendData = function()
+    return sendMQTTData(partNumber, serialNumber, l_topic)
+  end
+  liveConnectDemo_Model.timer:setExpirationTime(5000)
+  liveConnectDemo_Model.timer:setPeriodic(true)
+  liveConnectDemo_Model.timer:register("OnExpired", l_sendData)
+  liveConnectDemo_Model.timer:start()
+
+  -- Register application profile
+  CSK_LiveConnect.addMQTTProfile(partNumber, serialNumber, l_mqttProfile)
+end
+liveConnectDemo_Model.addNewMQTTProfile = addNewMQTTProfile
+-------------------------------------------------------------------------------------
+-- ######################
+-- ## MQTT profile END ##
+-- ######################
+-------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------
+-- ##############################
+-- ## HTTP profile (data poll) ##
+-- ##############################
+-------------------------------------------------------------------------------------
+-- Respond to HTTP request
+local function httpCallback(request)
+  local l_response = CSK_LiveConnect.Response.create()
+  local l_header = CSK_LiveConnect.Header.create()
+  CSK_LiveConnect.Header.setKey(l_header, "Content-Type")
+  CSK_LiveConnect.Header.setValue(l_header, "application/json")
+
+  l_response:setHeaders({l_header})
+  l_response:setStatusCode(200)
+
+  local l_responsePayload = {}
+  l_responsePayload["timestamp"] = DateTime.getDateTime()
+  l_responsePayload["index"] = math.random(0,255)
+  l_responsePayload["data"] = "Response payload from the edge side"
+
+  l_response:setContent(liveConnectDemo_Model.json.encode(l_responsePayload))
+  return l_response
+end
+liveConnectDemo_Model.httpCallback = httpCallback
+
+-------------------------------------------------------------------------------------
+-- Add HTTP application profile
+local function addNewHTTPProfile(partNumber, serialNumber)
+  local l_httpProfile =  CSK_LiveConnect.HTTPProfile.create()
+  l_httpProfile:setName("LiveConnect HTTP test profile")
+  l_httpProfile:setDescription("Profile to test bi-direction communication between the server and the client")
+  l_httpProfile:setVersion("0.2.0")
+  l_httpProfile:setUUID("68f372d5-607c-4e16-b137-63af9fadaaa5")
+  l_httpProfile:setOpenAPISpecification(File.open(liveConnectDemo_Model.httpProfileFilePath, "rb"):read())
+  l_httpProfile:setServiceLocation("http-test")
+
+  -- Endpoint definition
+  local l_uri = "getwithoutparam"
+  local l_crownName = Engine.getCurrentAppName() .. "." .. l_uri
+  local l_endpoint = CSK_LiveConnect.HTTPProfile.Endpoint.create()
+  l_endpoint:setHandlerFunction(l_crownName)
+  l_endpoint:setMethod("GET")
+  l_endpoint:setURI(l_uri)
+
+  -- Register callback function, which will be called to answer the HTTP request
+  Script.serveFunction(l_crownName, httpCallback, "object:CSK_LiveConnect.Request", "object:CSK_LiveConnect.Response")
+
+  -- Add endpoints
+  CSK_LiveConnect.HTTPProfile.setEndpoints(l_httpProfile, {l_endpoint})
+
+  -- Register application profile
+  CSK_LiveConnect.addHTTPProfile(partNumber, serialNumber, l_httpProfile)
+end
+liveConnectDemo_Model.addNewHTTPProfile = addNewHTTPProfile
+
+-------------------------------------------------------------------------------------
+-- ######################
+-- ## HTTP profile END ##
+-- ######################
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 
 --*************************************************************************
 --********************** End Function Scope *******************************
