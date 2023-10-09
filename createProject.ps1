@@ -1,15 +1,16 @@
 # Adapter definitions
 $appStudioProjectFolder = "project"
 $gitIgnoreFile = ".gitignore"
-$dependentModules = ("v3.0.0", "dependencies/moduleDateTime", "https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_LiveConnect"),
+$dependentModules = ("v3.0.0", "dependencies/moduleLiveConnect", "https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_LiveConnect"),
 					("v3.0.0", "dependencies/moduleDateTime", "https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_DateTime"),
 					("v4.0.0", "dependencies/modulePersistentData", "https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_PersistentData"),
 					("v4.0.0", "dependencies/module1stModuleLogger", "https://github.com/SICKAppSpaceCodingStarterKit/CSK_1stModule_Logger"),
 					("v2.1.0", "dependencies/moduleDeviceNetworkConfig", "https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_DeviceNetworkConfig")
 			
+# Optionally the "UnitTests_LiveConnect" can be add to the list
 $modules = 	"CSK_Template_LiveConnectDemo",
-			"UnitTests_LiveConnect",
-			"HomeScreen"
+			"HomeScreen",
+			#"UnitTests_LiveConnect" 
 
 # Add folder to the GIT ignore list if not already exist
 Function addFolderToGitIgnore

@@ -131,7 +131,7 @@ Following CSK modules are used for this application via Git subtrees and should 
 
 |Module|Version|Remark
 |--|--|--|
-|CSK_Module_LiveConenct|[V3.0.0](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_LiveConnect)|This module provides the LiveConnect functionality
+|CSK_Module_LiveConnect|[V3.0.0](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_LiveConnect)|This module provides the LiveConnect functionality
 |CSK_1stModule_Logger|[V4.0.0](https://github.com/SICKAppSpaceCodingStarterKit/CSK_1stModule_Logger/releases/tag/v4.0.0)|Optional
 |CSK_Module_DateTime|[V3.0.0](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_DateTime/releases/tag/v3.0.0)|This module is not required using a TDC-E as gateway device
 |CSK_Module_DeviceNetworkConfig|[V2.0.0](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_DeviceNetworkConfig/releases/tag/v2.0.0)|This module is not required using a TDC-E as gateway device
