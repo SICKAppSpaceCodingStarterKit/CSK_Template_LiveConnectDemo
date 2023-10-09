@@ -11,7 +11,7 @@ local function sendMQTTData(partNumber, serialNumber, topic)
   local l_payload = {}
   l_payload.timestamp = DateTime.getDateTime()
   l_payload.index = math.random(0,255)
-  l_payload.data = "Payload from the edge side"
+  l_payload.data = "Hello from the edge side."
 
   local l_payloadJson = m_json.encode(l_payload)
   CSK_LiveConnect.publishMQTTData(topic, partNumber, serialNumber, l_payloadJson)

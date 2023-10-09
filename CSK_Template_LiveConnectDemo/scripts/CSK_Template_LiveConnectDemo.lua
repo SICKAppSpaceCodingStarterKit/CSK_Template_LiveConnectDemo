@@ -44,8 +44,8 @@ _G.logHandle:applyConfig()
 
 -------------------------------------------------------------------------------------
 -- Variables
-local m_httpDemo = require("Demo.HttpDemo")
-local m_mqttDemo = require("Demo.MqttDemo")
+local m_httpDemo = require("Demo.HTTPDemo")
+local m_mqttDemo = require("Demo.MQTTDemo")
 
 ----------------------------------------------------------------------------
 --- Function that is called as soon as the LiveConnect Client is initialized
