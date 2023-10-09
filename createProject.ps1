@@ -8,7 +8,7 @@ $dependentModules = ("v3.0.0", "dependencies/moduleDateTime", "https://github.co
 					("v2.1.0", "dependencies/moduleDeviceNetworkConfig", "https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_DeviceNetworkConfig")
 			
 $modules = 	"CSK_Template_LiveConnectDemo",
-			"UnitTests_LiveConnect"
+			"UnitTests_LiveConnect",
 			"HomeScreen"
 
 # Add folder to the GIT ignore list if not already exist
