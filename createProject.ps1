@@ -9,7 +9,7 @@ $dependentModules = ("v3.0.0", "dependencies/moduleLiveConnect", "https://github
 			
 # Optionally the "UnitTests_LiveConnect" can be add to the list
 $modules = 	"CSK_Template_LiveConnectDemo",
-			"HomeScreen",
+			"HomeScreen"
 			#"UnitTests_LiveConnect" 
 
 # Add folder to the GIT ignore list if not already exist
