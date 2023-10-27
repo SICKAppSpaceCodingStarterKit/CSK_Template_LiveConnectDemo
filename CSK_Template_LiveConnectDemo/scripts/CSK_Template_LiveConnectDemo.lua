@@ -21,16 +21,11 @@
 --SOFTWARE.
 
 ---@diagnostic disable: undefined-global, redundant-parameter, missing-parameter
--- CreationTemplateVersion: 3.6.0
 --**************************************************************************
 --**********************Start Global Scope *********************************
 --**************************************************************************
 
--- If app property "LuaLoadAllEngineAPI" is FALSE, use this to load and check for required APIs
--- This can improve performance of garbage collection
-
---_G.availableAPIs = require('Template/LiveConnectDemo/helper/checkAPIs') -- can be used to adjust function scope of the module related on available APIs of the device
------------------------------------------------------------
+----------------------------------------------------------------------------
 -- Logger
 _G.logger = Log.SharedLogger.create('ModuleLogger')
 _G.logHandle = Log.Handler.create()
@@ -38,41 +33,35 @@ _G.logHandle:attachToSharedLogger('ModuleLogger')
 _G.logHandle:setConsoleSinkEnabled(false) --> Set to TRUE if CSK_Logger module is not used
 _G.logHandle:setLevel("ALL")
 _G.logHandle:applyConfig()
------------------------------------------------------------
-
--- Loading script regarding LiveConnectDemo_Model
--- Check this script regarding LiveConnectDemo_Model parameters and functions
-_G.liveConnectDemo_Model = require('Template/LiveConnectDemo/LiveConnectDemo_Model')
 
 --**************************************************************************
 --**********************End Global Scope ***********************************
 --**************************************************************************
+
+--**************************************************************************
 --**********************Start Function Scope *******************************
 --**************************************************************************
 
---- Function to react on startup event of the app
-local function main()
+-------------------------------------------------------------------------------------
+-- Variables
+local m_httpDemo = require("Demo.HTTPDemo")
+local m_mqttDemo = require("Demo.MQTTDemo")
 
-  ----------------------------------------------------------------------------------------
-  -- INFO: Please check if module will eventually load inital configuration triggered via
-  --       event CSK_PersistentData.OnInitialDataLoaded
-  --       (see internal variable _G.liveConnectDemo_Model.parameterLoadOnReboot)
-  --       If so, the app will trigger the "OnDataLoadedOnReboot" event if ready after loading parameters
-  --
-  -- Can be used e.g. like this
-  ----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------
+--- Function that is called as soon as the LiveConnect Client is initialized
+local function handleOnClientInitialized()
+  -- Part- and serial number of a SICK DT35 IO-Link device. To this device, both profiles are attached.
+  local l_partNumber = "1057651"
+  local l_serialNumber = "17410401"
 
-  -- _G.liveConnectDemo_Model.doSomething() -- if you want to start a function
-  -- ...
-  CSK_LiveConnectDemo.pageCalled() -- Update UI
+   -- MQTT profile (data push)
+  m_mqttDemo.addNewMQTTProfile(l_partNumber, l_serialNumber)
 
+  -- HTTP profile (data poll)
+  m_httpDemo.addNewHTTPProfile(l_partNumber, l_serialNumber)
 end
-Script.register("Engine.OnStarted", main)
 
---OR
-
--- Call function after persistent data was loaded
---Script.register("CSK_LiveConnectDemo.OnDataLoadedOnReboot", main)
+Script.register('CSK_LiveConnect.OnClientInitialized', handleOnClientInitialized)
 
 --**************************************************************************
 --**********************End Function Scope *********************************
