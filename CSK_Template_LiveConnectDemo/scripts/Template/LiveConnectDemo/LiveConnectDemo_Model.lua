@@ -31,24 +31,17 @@ setLiveConnectDemo_ModelHandle(liveConnectDemo_Model)
 --Loading helper functions if needed
 liveConnectDemo_Model.helperFuncs = require('Template/LiveConnectDemo/helper/funcs')
 
--- Optionally check if specific API was loaded via
---[[
-if _G.availableAPIs.specific then
--- ... doSomething ...
-end
-]]
-
 -- Create parameters / instances for this module
-local liveConnectDemo_Model.timer = Timer.create()
-local liveConnectDemo_Model.json = require("utils.Lunajson")
-local liveConnectDemo_Model.mqttProfileFilePath = "resources/samplePrfoiles/profileMQTTTest.yaml"
-local liveConnectDemo_Model.httpProfileFilePath = "resources/samplePrfoiles/profileHTTPTest.yaml"
+liveConnectDemo_Model.timer = Timer.create()
+liveConnectDemo_Model.json = require("Template/LiveConnectDemo/utils.Lunajson")
+liveConnectDemo_Model.mqttProfileFilePath = "resources/sampleProfiles/profileMQTTTest.yaml"
+liveConnectDemo_Model.httpProfileFilePath = "resources/sampleProfiles/profileHTTPTest.yaml"
+
+liveConnectDemo_Model.partNumber = '1057651' -- Part number of profile to add, e.g. of a DT35 sensor
+liveConnectDemo_Model.serialNumber = '17410401' -- Serial number of profile to add, e.g. of a DT35 sensor
 
 -- Parameters to be saved permanently if wanted
 liveConnectDemo_Model.parameters = {}
---liveConnectDemo_Model.parameters.paramA = 'paramA' -- Short docu of variable
---liveConnectDemo_Model.parameters.paramB = 123 -- Short docu of variable
---...
 
 --**************************************************************************
 --********************** End Global Scope **********************************
@@ -98,6 +91,7 @@ local function addNewMQTTProfile(partNumber, serialNumber)
   -- Register application profile
   CSK_LiveConnect.addMQTTProfile(partNumber, serialNumber, l_mqttProfile)
 end
+Script.serveFunction('CSK_LiveConnectDemo.addNewMQTTProfile', addNewMQTTProfile)
 liveConnectDemo_Model.addNewMQTTProfile = addNewMQTTProfile
 -------------------------------------------------------------------------------------
 -- ######################
@@ -159,6 +153,7 @@ local function addNewHTTPProfile(partNumber, serialNumber)
   CSK_LiveConnect.addHTTPProfile(partNumber, serialNumber, l_httpProfile)
 end
 liveConnectDemo_Model.addNewHTTPProfile = addNewHTTPProfile
+Script.serveFunction('CSK_LiveConnectDemo.addNewHTTPProfile', addNewHTTPProfile)
 
 -------------------------------------------------------------------------------------
 -- ######################

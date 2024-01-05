@@ -1,10 +1,11 @@
 # CSK_Template_LiveConnectDemo
 
-CSK Template to show how CSK modules can be used/combined to e.g. push sensor data to the SICK AssetHub.
+CSK Template to show how CSK modules can be used/combined to e.g. push sensor data to the SICK AssetHub.  
+Please have a look into the README of [CSK_Module_LiveConnect](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_LiveConnect) for further details of LiveConnect.
 
 ## How to Run
 See following chapters to run this template.  
-For further information of this template check out the [documentation](https://raw.githack.com/SICKAppSpaceCodingStarterKit/CSK_Template_AssetHub/main/docu/CSK_Template_AssetHub.html) in the folder "docu".
+For further information of this template check out the [documentation](https://raw.githack.com/SICKAppSpaceCodingStarterKit/CSK_Template_LiveConnectDemo/main/docu/CSK_Template_LiveConnectDemo.html) in the folder "docu".
 
 ## Pairing
 Before data can be exchanged, the physical gateway device must first be paired with the digital twin in the SICK AssetHub. Please do the following step by step:
@@ -106,8 +107,7 @@ AH ->> LC: ...
 ### Add MQTT profile (data push)
 Code snipped to add an MQTT profile and send data every 5s into the cloud.
 >**Remark**
-> The profile "profileMqttTest.yaml" is part of the app "UnitTests_LiveConnect".
-The UUID is profile specific, if you want to create an own profile, please generate a UUID for it.
+> The UUID is profile specific. If you want to create an own profile, please generate a UUID for it.
 
 ```lua
 -------------------------------------------------------------------------------------
@@ -167,8 +167,7 @@ On the AssetHub side, the data can be viewed and forwarded to a web application.
 ### Add HTTP profile (data poll)
 Code snipped to add an HTTP profile and register a callback function
 >**Remark**
-The profile "profileHttpTest.yaml" is part of the app "UnitTests_LiveConnect".
-The UUID is profile specific, if you want to create an own profile, please generate a UUID for it.
+> The UUID is profile specific. If you want to create an own profile, please generate a UUID for it.
 
 ```lua
 -------------------------------------------------------------------------------------
@@ -264,25 +263,6 @@ Following CSK modules are used for this application via Git subtrees and should 
 It is programmed in an object oriented way. Some of the modules use kind of "classes" in Lua to make it possible to reuse code / classes in other projects.  
 In general it is not neccessary to code this way, but the architecture of this app can serve as a sample to be used especially for bigger projects and to make it easier to share code.  
 Please check the [documentation](https://github.com/SICKAppSpaceCodingStarterKit/.github/blob/main/docu/SICKAppSpaceCodingStarterKit_Documentation.md) of CSK for further information.  
-
-## Tests
-The project includes a test script that tests some aspects of the app.
-
-This unit test establishes a paring between the device and the digital twin in the AssetHub. The corresponding asset must already exist in the AssetHub. The pairing token is given as the parameter "token" when the test is started. A peer device is automatically added to the gateway device. An HTTP and an MQTT profile are added to both devices (gateway and peer device). After the unit test has been successfully completed, the functionality must be checked using the checklist.
-
-The unit tests can be started via an HTTP REST call (POST) or with a standard crown call.
-
-```Json
-Body:
-{
-  "data": {
-    "token": "" // Empty string = Use an already existing pairing
-  }
-}
-```
-
->**Remark**
-> The test classes are executed in alphabetical order. The test cases do not really have a "unit test" character, but are a mixture of unit tests and integration tests.
 
 ## Topics
 Coding Starter Kit, CSK, Module, SICK-AppSpace, LiveConnect, AssetHub, Cloud
