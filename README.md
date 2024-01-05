@@ -1,7 +1,8 @@
 # CSK_Template_LiveConnectDemo
 
 CSK Template to show how CSK modules can be used/combined to e.g. push sensor data to the SICK AssetHub.  
-Please have a look into the README of [CSK_Module_LiveConnect](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_LiveConnect) for further details of LiveConnect.
+Please have a look into the README of [CSK_Module_LiveConnect](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_LiveConnect) for further details of LiveConnect.  
+![plot](./docu/media/UI_Screenshot.png)
 
 ## How to Run
 See following chapters to run this template.  
