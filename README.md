@@ -6,14 +6,9 @@ Please have a look into the README of [CSK_Module_LiveConnect](https://github.co
 
 ## How to Run
 >**Please note**
->This project has dependencies to other apps.
-To open the project including all dependencies with AppStudio, it is necessary to activate symbolic links in the .gitconfig.
->
->Open a CMD prompt and execute the following commands once.
-**git config --local core.symlinks true**
-**git reset --hard HEAD**
->
->Now the project directory can be loaded with AppStudio.
+>This project has dependencies to other modules which were included as subtrees (see 'subtrees' folder) and are linked via symbolic links.  
+>If you want to clone this repository, please make sure that within your gitconfig you set the parameter 'core.symlinks' to TRUE (regarding further information see the [Contribution Guideline](https://github.com/SICKAppSpaceCodingStarterKit/.github/blob/main/Contribution_Guideline.md#how-to-use-csk-modules-in-other-git-projects) ).  
+>By doing this, the project directory can directly be used as working directory within AppStudio / VS Code.  
 
 See following chapters to run this template.  
 For further information of this template check out the [documentation](https://raw.githack.com/SICKAppSpaceCodingStarterKit/CSK_Template_LiveConnectDemo/main/docu/CSK_Template_LiveConnectDemo.html) in the folder "docu".
