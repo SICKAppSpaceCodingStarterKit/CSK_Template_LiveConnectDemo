@@ -1,4 +1,50 @@
 {
   "version": "1.0", 
-  "pages": []
+  "pages": [
+    {
+      "category": "Live Connect",
+      "pages": [
+
+        {
+          "path": "CSK_Template_LiveConnectDemo/CSK_Template_LiveConnectDemo.html",
+          "name": "Setup"
+        },
+
+        {
+          "path": "CSK_Template_LiveConnectDemo/CSK_Module_LiveConnectPairing_Frame.html",
+          "name": "Pairing"
+        },
+
+        {
+          "path": "CSK_Template_LiveConnectDemo/CSK_Module_LiveConnectParameters_Frame.html",
+          "name": "Parameters"
+        }
+        
+      ]
+    },
+    {
+      "category": "Other Setup",
+      "pages": [
+        {
+          "path": "CSK_Template_LiveConnectDemo/CSK_Module_Logger_Frame.html",
+          "name": "Logs"
+        },
+
+        {
+          "path": "CSK_Template_LiveConnectDemo/CSK_Module_DateTime_Frame.html",
+          "name": "Date Time"
+        },
+
+        {
+          "path": "CSK_Template_LiveConnectDemo/CSK_Module_DeviceNetworkConfig_Frame.html",
+          "name": "Network Config"
+        },
+
+        {
+          "path": "CSK_Template_LiveConnectDemo/CSK_Module_PersistentData_Frame.html",
+          "name": "Persistent Data"
+        }
+      ]
+    }
+  ]
 }

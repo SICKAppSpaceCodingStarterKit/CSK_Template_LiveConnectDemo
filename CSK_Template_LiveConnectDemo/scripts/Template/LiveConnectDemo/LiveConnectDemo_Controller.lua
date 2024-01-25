@@ -20,7 +20,9 @@ local liveConnectDemo_Model
 
 -- ************************ UI Events Start ********************************
 
--- Script.serveEvent("CSK_LiveConnectDemo.OnNewEvent", "LiveConnectDemo_OnNewEvent")
+Script.serveEvent('CSK_LiveConnectDemo.OnNewStatusPartNumber', 'LiveConnectDemo_OnNewStatusPartNumber')
+Script.serveEvent('CSK_LiveConnectDemo.OnNewStatusSerialNumber', 'LiveConnectDemo_OnNewStatusSerialNumber')
+
 Script.serveEvent("CSK_LiveConnectDemo.OnNewStatusLoadParameterOnReboot", "LiveConnectDemo_OnNewStatusLoadParameterOnReboot")
 Script.serveEvent("CSK_LiveConnectDemo.OnPersistentDataModuleAvailable", "LiveConnectDemo_OnPersistentDataModuleAvailable")
 Script.serveEvent("CSK_LiveConnectDemo.OnNewParameterName", "LiveConnectDemo_OnNewParameterName")
@@ -31,18 +33,7 @@ Script.serveEvent('CSK_LiveConnectDemo.OnUserLevelMaintenanceActive', 'LiveConne
 Script.serveEvent('CSK_LiveConnectDemo.OnUserLevelServiceActive', 'LiveConnectDemo_OnUserLevelServiceActive')
 Script.serveEvent('CSK_LiveConnectDemo.OnUserLevelAdminActive', 'LiveConnectDemo_OnUserLevelAdminActive')
 
--- ...
-
 -- ************************ UI Events End **********************************
-
---[[
---- Some internal code docu for local used function
-local function functionName()
-  -- Do something
-
-end
-]]
-
 --**************************************************************************
 --********************** End Global Scope **********************************
 --**************************************************************************
@@ -108,12 +99,12 @@ local function handleOnExpiredTmrLiveConnectDemo()
 
   updateUserLevel()
 
-  -- Script.notifyEvent("LiveConnectDemo_OnNewEvent", false)
+  Script.notifyEvent("LiveConnectDemo_OnNewStatusPartNumber", liveConnectDemo_Model.partNumber)
+  Script.notifyEvent("LiveConnectDemo_OnNewStatusSerialNumber", liveConnectDemo_Model.serialNumber)
 
   Script.notifyEvent("LiveConnectDemo_OnNewStatusLoadParameterOnReboot", liveConnectDemo_Model.parameterLoadOnReboot)
   Script.notifyEvent("LiveConnectDemo_OnPersistentDataModuleAvailable", liveConnectDemo_Model.persistentModuleAvailable)
   Script.notifyEvent("LiveConnectDemo_OnNewParameterName", liveConnectDemo_Model.parametersName)
-  -- ...
 end
 Timer.register(tmrLiveConnectDemo, "OnExpired", handleOnExpiredTmrLiveConnectDemo)
 
@@ -126,20 +117,36 @@ local function pageCalled()
 end
 Script.serveFunction("CSK_LiveConnectDemo.pageCalled", pageCalled)
 
---[[
-local function setSomething(value)
-  _G.logger:info(nameOfModule .. ": Set new value = " .. value)
-  liveConnectDemo_Model.varA = value
+local function setPartNumber(partNumber)
+  _G.logger:fine(nameOfModule .. ": Preset part number to " .. partNumber)
+  liveConnectDemo_Model.partNumber = partNumber
 end
-Script.serveFunction("CSK_LiveConnectDemo.setSomething", setSomething)
-]]
+Script.serveFunction('CSK_LiveConnectDemo.setPartNumber', setPartNumber)
+
+local function setSerialNumber(serialNumber)
+  _G.logger:fine(nameOfModule .. ": Preset serial number to " .. serialNumber)
+  liveConnectDemo_Model.serialNumber = serialNumber
+end
+Script.serveFunction('CSK_LiveConnectDemo.setSerialNumber', setSerialNumber)
+
+local function addMQTTProfileViaUI()
+  _G.logger:info(nameOfModule .. ": Add MQTT profile with partNo. " .. liveConnectDemo_Model.partNumber .. " and serialNo. " .. liveConnectDemo_Model.serialNumber)
+  liveConnectDemo_Model.addNewMQTTProfile(liveConnectDemo_Model.partNumber, liveConnectDemo_Model.serialNumber)
+end
+Script.serveFunction('CSK_LiveConnectDemo.addMQTTProfileViaUI', addMQTTProfileViaUI)
+
+local function addHTTPProfileViaUI()
+  _G.logger:info(nameOfModule .. ": Add HTTP profile with partNo. " .. liveConnectDemo_Model.partNumber .. " and serialNo. " .. liveConnectDemo_Model.serialNumber)
+  liveConnectDemo_Model.addNewHTTPProfile(liveConnectDemo_Model.partNumber, liveConnectDemo_Model.serialNumber)
+end
+Script.serveFunction('CSK_LiveConnectDemo.addHTTPProfileViaUI', addHTTPProfileViaUI)
 
 -- *****************************************************************
 -- Following function can be adapted for CSK_PersistentData module usage
 -- *****************************************************************
 
 local function setParameterName(name)
-  _G.logger:info(nameOfModule .. ": Set parameter name: " .. tostring(name))
+  _G.logger:fine(nameOfModule .. ": Set parameter name: " .. tostring(name))
   liveConnectDemo_Model.parametersName = name
 end
 Script.serveFunction("CSK_LiveConnectDemo.setParameterName", setParameterName)
@@ -148,7 +155,7 @@ local function sendParameters()
   if liveConnectDemo_Model.persistentModuleAvailable then
     CSK_PersistentData.addParameter(liveConnectDemo_Model.helperFuncs.convertTable2Container(liveConnectDemo_Model.parameters), liveConnectDemo_Model.parametersName)
     CSK_PersistentData.setModuleParameterName(nameOfModule, liveConnectDemo_Model.parametersName, liveConnectDemo_Model.parameterLoadOnReboot)
-    _G.logger:info(nameOfModule .. ": Send LiveConnectDemo parameters with name '" .. liveConnectDemo_Model.parametersName .. "' to CSK_PersistentData module.")
+    _G.logger:fine(nameOfModule .. ": Send LiveConnectDemo parameters with name '" .. liveConnectDemo_Model.parametersName .. "' to CSK_PersistentData module.")
     CSK_PersistentData.saveData()
   else
     _G.logger:warning(nameOfModule .. ": CSK_PersistentData module not available.")
@@ -160,7 +167,7 @@ local function loadParameters()
   if liveConnectDemo_Model.persistentModuleAvailable then
     local data = CSK_PersistentData.getParameter(liveConnectDemo_Model.parametersName)
     if data then
-      _G.logger:info(nameOfModule .. ": Loaded parameters from CSK_PersistentData module.")
+      _G.logger:fine(nameOfModule .. ": Loaded parameters from CSK_PersistentData module.")
       liveConnectDemo_Model.parameters = liveConnectDemo_Model.helperFuncs.convertContainer2Table(data)
       -- If something needs to be configured/activated with new loaded data, place this here:
       -- ...
@@ -178,7 +185,7 @@ Script.serveFunction("CSK_LiveConnectDemo.loadParameters", loadParameters)
 
 local function setLoadOnReboot(status)
   liveConnectDemo_Model.parameterLoadOnReboot = status
-  _G.logger:info(nameOfModule .. ": Set new status to load setting on reboot: " .. tostring(status))
+  _G.logger:fine(nameOfModule .. ": Set new status to load setting on reboot: " .. tostring(status))
 end
 Script.serveFunction("CSK_LiveConnectDemo.setLoadOnReboot", setLoadOnReboot)
 

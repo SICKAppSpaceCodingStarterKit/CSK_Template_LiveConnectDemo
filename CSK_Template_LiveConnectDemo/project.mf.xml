@@ -6,15 +6,11 @@
         </crown>
         <crown name="CSK_LiveConnectDemo">
             <trait>released</trait>
-            <desc>Please fill in information regarding: What is the idea of this module and its features? +
-How to use this module in general.... like: + 
-{empty} + 
-Typically the features of this module are used like this (check also main script of this module): +
-**1) Setup** +
-ToDo +
-{empty} + 
-**2) Something else...** +
-</desc>
+            <desc>CSK Template to show how CSK modules can be used to establish a LiveConnect connection e.g. to push sensor data to the SICK AssetHub. +
+Please have a look into the online documentation (https://github.com/SICKAppSpaceCodingStarterKit/CSK_Template_LiveConnectDemo). +
+{empty} +
+This template provides an UI with a step by step setup to configure the LiveConnect connection. +
+As soon as a connection is established you can make use of the 'addHTTPProfile' / 'addMQTTProfile' functions to add profiles. +</desc>
             <serves>
                 <event name="OnNewStatusLoadParameterOnReboot">
                     <desc>Notify status if parameters should be loaded on app/device boot up.</desc>
@@ -47,6 +43,14 @@ ToDo +
                     <desc>Status of Admin userlevel. Used internally in combination with the CSK_UserManagement module if available.</desc>
                     <param desc="Status" multiplicity="1" name="status" type="bool"/>
                 </event>
+                <event name="OnNewStatusPartNumber">
+                    <desc>Notify part number of profile to add.</desc>
+                    <param desc="Part number." multiplicity="1" name="partNumber" type="string"/>
+                </event>
+                <event name="OnNewStatusSerialNumber">
+                    <desc>Notify serial number of profile to add.</desc>
+                    <param desc="Serial number." multiplicity="1" name="serialNumber" type="string"/>
+                </event>
                 <function name="setParameterName">
                     <desc>Function to set the name of the parameters if saved/loaded via the CSK_PersistentData module.</desc>
                     <param desc="Name of the parameter." multiplicity="1" name="name" type="string"/>
@@ -65,10 +69,34 @@ ToDo +
                     <desc>Function to register "OnResume" of the module UI (only as helper function).</desc>
                     <return desc="Empty string (only needed to simplify binding)." multiplicity="1" name="empty" type="string"/>
                 </function>
+                <function name="addMQTTProfileViaUI">
+                    <desc>Function to add a MQTT profile with predefined part-/serialNumber (see 'setPartNumber' / 'setSerialNumber').</desc>
+                </function>
+                <function name="addHTTPProfileViaUI">
+                    <desc>Function to add a HTTP profile with predefined part-/serialNumber (see 'setPartNumber' / 'setSerialNumber').</desc>
+                </function>
+                <function name="setPartNumber">
+                    <desc>Function to preset part number of profile to add.</desc>
+                    <param desc="Part number." multiplicity="1" name="partNumber" type="string"/>
+                </function>
+                <function name="setSerialNumber">
+                    <desc>Function to preset serial number of profile to add.</desc>
+                    <param desc="Serial number." multiplicity="1" name="serialNumber" type="string"/>
+                </function>
+                <function name="addNewHTTPProfile">
+                    <desc>Function to add HTTP profile.</desc>
+                    <param desc="Part number." multiplicity="1" name="partNumber" type="string"/>
+                    <param desc="Serial number." multiplicity="1" name="serialNumber" type="string"/>
+                </function>
+                <function name="addNewMQTTProfile">
+                    <desc>Function to add MQTT profile.</desc>
+                    <param desc="Part number." multiplicity="1" name="partNumber" type="string"/>
+                    <param desc="Serial number." multiplicity="1" name="serialNumber" type="string"/>
+                </function>
             </serves>
         </crown>
         <meta key="author">SICK AG</meta>
-        <meta key="version">0.1.0</meta>
+        <meta key="version">1.0.0</meta>
         <meta key="priority">low</meta>
         <meta key="copy-protected">false</meta>
         <meta key="read-protected">false</meta>

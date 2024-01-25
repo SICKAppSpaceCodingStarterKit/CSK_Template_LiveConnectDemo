@@ -40,6 +40,16 @@ _G.logHandle:setLevel("ALL")
 _G.logHandle:applyConfig()
 -----------------------------------------------------------
 
+--- Function to show UI of this app first
+local function setAppAsMainWebpage()
+  local defaultWebpage = Parameters.get("AEDefaultWebpage")
+  if defaultWebpage == nil then
+    _G.logger:warning("Device does not support setting the default webpage.")
+  else
+    assert(Parameters.set("AEDefaultWebpage", _APPNAME))
+  end
+end
+
 -- Loading script regarding LiveConnectDemo_Model
 -- Check this script regarding LiveConnectDemo_Model parameters and functions
 _G.liveConnectDemo_Model = require('Template/LiveConnectDemo/LiveConnectDemo_Model')
@@ -51,7 +61,7 @@ _G.liveConnectDemo_Model = require('Template/LiveConnectDemo/LiveConnectDemo_Mod
 --**************************************************************************
 
 --- Function to react on startup event of the app
-local function main()
+local function handleOnStarted()
 
   ----------------------------------------------------------------------------------------
   -- INFO: Please check if module will eventually load inital configuration triggered via
@@ -60,19 +70,26 @@ local function main()
   --       If so, the app will trigger the "OnDataLoadedOnReboot" event if ready after loading parameters
   --
   -- Can be used e.g. like this
-  ----------------------------------------------------------------------------------------
 
-  -- _G.liveConnectDemo_Model.doSomething() -- if you want to start a function
-  -- ...
+  --[[
+  --- Function to react on LiveConnect initialization  
+  local function handleOnClientInitialized()
+    -- MQTT profile (data push)
+    CSK_LiveConnectDemo.addNewMQTTProfile("1057651", "17410401") -- Part- and serial number of a SICK DT35 IO-Link device
+
+    -- HTTP profile (data poll)
+    CSK_LiveConnectDemo.addNewHTTPProfile("1057651", "17410401") -- Part- and serial number of a SICK DT35 IO-Link device
+    CSK_LiveConnectDemo.pageCalled() -- Update UI
+  end
+  Script.register('CSK_LiveConnect.OnClientInitialized', handleOnClientInitialized)
+  ]]
+
+  ----------------------------------------------------------------------------------------
+  setAppAsMainWebpage()
   CSK_LiveConnectDemo.pageCalled() -- Update UI
 
 end
-Script.register("Engine.OnStarted", main)
-
---OR
-
--- Call function after persistent data was loaded
---Script.register("CSK_LiveConnectDemo.OnDataLoadedOnReboot", main)
+Script.register('Engine.OnStarted', handleOnStarted)
 
 --**************************************************************************
 --**********************End Function Scope *********************************
